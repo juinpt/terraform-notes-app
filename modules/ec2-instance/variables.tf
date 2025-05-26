@@ -62,3 +62,6 @@ variable "flask_secret_key" {
   sensitive = true
 }
 
+variable "opensearch_host" {
+  type = string
+}
