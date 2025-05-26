@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block title %}My Notes{% endblock %}
+{% block content %}
+<form method="GET">
+  <input name="q" placeholder="Search notes" value="{{ request.args.q or '' }}">
+  <button type="submit">Search</button>
+</form>
+<ul>
+  {% for note in notes %}
+    <li><strong>{{ note.title }}</strong>: {{ note.content }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

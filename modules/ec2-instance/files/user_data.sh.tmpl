@@ -1,0 +1,17 @@
+#!/bin/bash
+apt-get update -y
+apt-get install -y docker.io
+systemctl enable docker
+systemctl start docker
+usermod -aG docker ubuntu
+
+docker pull juinnpt/notes-app:latest
+docker run -d -p 8080:8080 \
+-e POSTGRES_HOST=${postgres_host} \
+-e POSTGRES_PORT=${postgres_port} \
+-e POSTGRES_DB=${postgres_db} \
+-e POSTGRES_USER=${postgres_user} \
+-e POSTGRES_PASSWORD=${postgres_password} \
+-e OPENSEARCH_HOST=${opensearch_host} \
+-e AWS_REGION=${aws_region} \
+-e FLASK_SECRET_KEY=${flask_secret_key} juinnpt/notes-app

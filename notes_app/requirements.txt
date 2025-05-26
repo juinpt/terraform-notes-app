@@ -1,0 +1,8 @@
+flask
+flask-bcrypt
+flask-jwt-extended
+opensearch-py
+psycopg2-binary
+boto3
+requests-aws4auth
+gunicorn
