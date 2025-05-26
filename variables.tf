@@ -18,3 +18,8 @@ variable "flask_secret_key" {
   type      = string
   sensitive = true
 }
+
+variable "domain_name" {
+  type    = string
+  default = "my-aws-app.afonso.jp"
+}
