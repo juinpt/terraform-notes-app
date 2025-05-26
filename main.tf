@@ -89,7 +89,6 @@ resource "aws_lb_listener" "front_end" {
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn   = aws_acm_certificate.cert.arn
-  alpn_policy       = "HTTP2Preferred"
 
   default_action {
     type             = "forward"
