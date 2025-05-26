@@ -4,6 +4,22 @@ variable "aws_region" {
   description = "AWS Region"
 }
 
+variable "ami" {
+  type        = string
+  description = "The AMI for the EC2 instances; must be ubuntu"
+}
+
+variable "instance_count" {
+  type    = number
+  default = 2
+}
+
+variable "instance_type" {
+  type        = string
+  default     = "t2.micro"
+  description = "EC2 instance type"
+}
+
 variable "postgres_user" {
   type    = string
   default = "postgres"
@@ -23,3 +39,4 @@ variable "domain_name" {
   type    = string
   default = "my-aws-app.afonso.jp"
 }
+

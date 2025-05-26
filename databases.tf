@@ -30,8 +30,8 @@ resource "aws_db_instance" "postgres" {
   instance_class          = "db.t4g.micro"
   allocated_storage       = 20
   db_name                 = "notesdb"
-  username                = var.db_username
-  password                = var.db_password
+  username                = var.postgres_user
+  password                = var.postgres_password
   multi_az                = false # for saving costs, turn on for hot-standby redudancy
   backup_retention_period = 7
   backup_window           = "15:00-16:00" # 00:00-01:00 JST
@@ -42,6 +42,14 @@ resource "aws_db_instance" "postgres" {
   tags = {
     Name = "notes-postgres"
   }
+}
+
+data "aws_region" "current" {
+
+}
+
+data "aws_caller_identity" "current" {
+
 }
 
 data "aws_iam_policy_document" "notes_app_policy" {
