@@ -5,16 +5,16 @@ variable "aws_region" {
 }
 
 variable "postgres_user" {
-  type        = string
-  default     = "postgres"
+  type    = string
+  default = "postgres"
 }
 
 variable "postgres_password" {
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
 variable "flask_secret_key" {
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }

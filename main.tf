@@ -8,7 +8,7 @@ module "web_instance" {
   subnet_ids             = data.aws_subnets.default_vpc_subnets.ids
   opensearch_host        = aws_opensearch_domain.es.endpoint
   postgres_host          = aws_db_instance.postgres.address
-  postgres_port	         = aws_db_instance.postgres.port
+  postgres_port          = aws_db_instance.postgres.port
   postgres_db            = aws_db_instance.postgres.db_name
   postgres_user          = var.postgres_user
   postgres_password      = var.postgres_password
