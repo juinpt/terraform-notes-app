@@ -26,7 +26,7 @@ resource "aws_security_group" "rds_sg" {
 resource "aws_db_instance" "postgres" {
   identifier              = "notes-db"
   engine                  = "postgres"
-  engine-version          = "15.13"
+  engine_version          = "15.13"
   instance_class          = "db.t4g.micro"
   allocated_storage       = 20
   db_name                 = "notesdb"

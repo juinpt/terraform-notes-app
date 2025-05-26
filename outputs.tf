@@ -1,5 +1,5 @@
 output "aws_lb_public_dns" {
-  value = aws_lb.front-end.dns_name
+  value = aws_lb.front_end.dns_name
 }
 
 output "opensearch_host" {

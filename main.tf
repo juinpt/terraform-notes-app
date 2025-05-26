@@ -4,7 +4,7 @@ module "web_instance" {
   instance_type          = var.instance_type
   ami                    = var.ami
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-  instance_count         = var.intance_count
+  instance_count         = var.instance_count
   subnet_ids             = data.aws_subnets.default_vpc_subnets.ids
   opensearch_host        = aws_opensearch_domain.es.endpoint
   postgres_host          = aws_db_instance.postgres.address
