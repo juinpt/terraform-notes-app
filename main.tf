@@ -86,7 +86,7 @@ resource "aws_acm_certificate" "cert" {
 resource "aws_lb_listener" "front_end" {
   load_balancer_arn = aws_lb.front_end.arn
   port              = "443"
-  protocol          = "TLS"
+  protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn   = aws_acm_certificate.cert.arn
   alpn_policy       = "HTTP2Preferred"
