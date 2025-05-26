@@ -37,6 +37,10 @@ variable "flask_secret_key" {
 
 variable "domain_name" {
   type    = string
-  default = "my-aws-app.afonso.jp"
+  default = "notes-app.afonso.jp"
 }
 
+variable "route53_zone" {
+  type    = string
+  default = "afonso.jp."
+}

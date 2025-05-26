@@ -70,19 +70,6 @@ resource "aws_lb_target_group" "app" {
   }
 }
 
-resource "aws_acm_certificate" "cert" {
-  domain_name       = var.domain_name
-  validation_method = "DNS"
-
-  tags = {
-    Name = "notes-app"
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 resource "aws_lb_listener" "front_end" {
   load_balancer_arn = aws_lb.front_end.arn
   port              = "443"
