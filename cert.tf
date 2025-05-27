@@ -29,3 +29,14 @@ resource "aws_acm_certificate_validation" "cert" {
   validation_record_fqdns = [aws_route53_record.cert_validation.fqdn]
 }
 
+resource "aws_route53_record" "app_alias" {
+  zone_id = data.aws_route53_zone.my_zone.zone_id
+  name    = "notes"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.front_end.dns_name
+    zone_id                = aws_lb.front_end.zone_id
+    evaluate_target_health = true
+  }
+}
