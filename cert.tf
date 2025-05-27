@@ -31,7 +31,7 @@ resource "aws_acm_certificate_validation" "cert" {
 
 resource "aws_route53_record" "app_alias" {
   zone_id = data.aws_route53_zone.my_zone.zone_id
-  name    = "notes"
+  name    = var.dns_name_alias
   type    = "A"
 
   alias {

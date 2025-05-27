@@ -44,3 +44,8 @@ variable "route53_zone" {
   type    = string
   default = "r-afonso.pt."
 }
+
+variable "dns_name_alias" {
+  type    = string
+  default = "notes"
+}
