@@ -65,3 +65,7 @@ variable "flask_secret_key" {
 variable "opensearch_host" {
   type = string
 }
+
+variable "iam_instance_profile" {
+  type = string
+}

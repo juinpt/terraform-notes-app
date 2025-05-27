@@ -6,14 +6,17 @@ module "web_instance" {
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   instance_count         = var.instance_count
   subnet_ids             = data.aws_subnets.default_vpc_subnets.ids
-  opensearch_host        = aws_opensearch_domain.es.endpoint
-  postgres_host          = aws_db_instance.postgres.address
-  postgres_port          = aws_db_instance.postgres.port
-  postgres_db            = aws_db_instance.postgres.db_name
-  postgres_user          = var.postgres_user
-  postgres_password      = var.postgres_password
-  aws_region             = var.aws_region
-  flask_secret_key       = var.flask_secret_key
+  iam_instance_profile   = aws_iam_instance_profile.notes_profile.name
+
+  opensearch_host   = aws_opensearch_domain.es.endpoint
+  postgres_host     = aws_db_instance.postgres.address
+  postgres_port     = aws_db_instance.postgres.port
+  postgres_db       = aws_db_instance.postgres.db_name
+  postgres_user     = var.postgres_user
+  postgres_password = var.postgres_password
+  aws_region        = var.aws_region
+  flask_secret_key  = var.flask_secret_key
+
 }
 
 # Get all subnets ids in the default VPC

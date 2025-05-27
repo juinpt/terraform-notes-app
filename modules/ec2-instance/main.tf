@@ -7,6 +7,7 @@ resource "aws_instance" "aws_ubuntu" {
   ami                    = var.ami
   vpc_security_group_ids = var.vpc_security_group_ids
   subnet_id              = element(var.subnet_ids, count.index % length(var.subnet_ids))
+  iam_instance_profile   = var.iam_instance_profile
 
   user_data = templatefile("${path.module}/files/user_data.sh.tmpl", {
     postgres_host     = "${var.postgres_host}"
