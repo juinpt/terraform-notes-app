@@ -131,7 +131,7 @@ def new_note():
             "title": title,
             "content": content
         }
-        es.index(index=INDEX, id=note_id, document=note)
+        es.index(index=INDEX, id=note_id, body=note)
         return redirect(url_for("notes"))
     return render_template("new_note.html")
 
