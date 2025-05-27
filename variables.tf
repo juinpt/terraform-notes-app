@@ -37,10 +37,10 @@ variable "flask_secret_key" {
 
 variable "domain_name" {
   type    = string
-  default = "notes-app.afonso.jp"
+  default = "notes.r-afonso.pt"
 }
 
 variable "route53_zone" {
   type    = string
-  default = "afonso.jp."
+  default = "r-afonso.pt."
 }
