@@ -92,7 +92,7 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        cursor.execute("SELECT password FROM users WHERE username = %s" % username)
+        cursor.execute("SELECT password FROM users WHERE username = %s", (username, ))
         user = cursor.fetchone()
         if user and bcrypt.check_password_hash(user[0], password):
             session["user"] = username
