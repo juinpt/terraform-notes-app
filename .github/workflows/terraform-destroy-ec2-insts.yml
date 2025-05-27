@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'Terraform Destoy Web Instances'
 
 on:
   workflow_dispatch:
