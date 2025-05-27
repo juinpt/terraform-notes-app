@@ -58,7 +58,7 @@ data "aws_iam_policy_document" "notes_app_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::{data.aws_caller_identity.current.account_id}:role/notes-ec2-role"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/notes-ec2-role"]
     }
 
     actions   = ["es:*"]
