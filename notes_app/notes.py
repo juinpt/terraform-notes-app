@@ -34,13 +34,13 @@ from requests_aws4auth import AWS4Auth
 import os
 
 app = Flask(__name__)
-#app.secret_key = os.environ("")
+app.secret_key = os.environ["FLASK_SECRET_KEY"]
 
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 # Amazon OpenSearch setup
-region = os.environ("AWS_REGION")
+region = os.environ["AWS_REGION"]
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, "es", session_token=credentials.token)
 
@@ -58,11 +58,11 @@ if not es.indices.exists(index=INDEX):
 
 # PostgreSQL connection
 conn = psycopg2.connect(
-    dbname=os.environ("POSTGRES_DB"),
-    user=os.environ("POSTGRES_USER"),
-    password=os.environ("POSTGRES_PASSWORD"),
-    host=os.environ("POSTGRES_HOST"),
-    port=os.environ("POSTGRES_PORT")
+    dbname=os.environ["POSTGRES_DB"],
+    user=os.environ["POSTGRES_USER"],
+    password=os.environ["POSTGRES_PASSWORD"],
+    host=os.environ["POSTGRES_HOST"],
+    port=os.environ["POSTGRES_PORT"]
 )
 cursor = conn.cursor()
 cursor.execute("""
