@@ -118,7 +118,7 @@ resource "aws_default_vpc" "default" {
 }
 
 resource "aws_security_group" "ec2_sg" {
-  name   = "ec2_sg"
+  name   = "ec2-sg"
   vpc_id = aws_default_vpc.default.id
 
   ingress {
