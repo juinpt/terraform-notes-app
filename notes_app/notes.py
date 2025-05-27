@@ -112,7 +112,7 @@ def notes():
         return redirect(url_for("login"))
     query = request.args.get("q", "")
     if query:
-        result = es.search(index=INDEX, query={"multi_match": {"query": query, "fields": ["title", "content"]}})
+        result = es.search(index=INDEX, body={"query": {"multi_match": {"query": query,"fields": ["title", "content"]}}})
         hits = [hit["_source"] for hit in result["hits"]["hits"]]
     else:
         hits = []

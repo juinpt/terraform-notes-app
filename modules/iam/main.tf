@@ -1,3 +1,9 @@
+data "aws_region" "current" {
+}
+
+data "aws_caller_identity" "current" {
+}
+
 resource "aws_iam_role" "notes_ec2_role" {
   name = "notes-ec2-role"
 
@@ -30,9 +36,19 @@ resource "aws_iam_policy" "opensearch_access" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "attach_policy" {
+resource "aws_iam_role_policy_attachment" "opensearch_access" {
   role       = aws_iam_role.notes_ec2_role.name
   policy_arn = aws_iam_policy.opensearch_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ssm" {
+  role       = aws_iam_role.notes_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
+  role       = aws_iam_role.notes_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
 resource "aws_iam_instance_profile" "notes_profile" {

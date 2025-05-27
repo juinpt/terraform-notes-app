@@ -3,15 +3,15 @@ module "web_instance" {
   source                 = "./modules/ec2-instance"
   instance_type          = var.instance_type
   ami                    = var.ami
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  vpc_security_group_ids = [module.security_groups.ec2_sg_id]
   instance_count         = var.instance_count
-  subnet_ids             = data.aws_subnets.default_vpc_subnets.ids
-  iam_instance_profile   = aws_iam_instance_profile.notes_profile.name
+  subnet_ids             = module.vpc.vpc_subnets_ids
+  iam_instance_profile   = module.iam.notes_profile_name
 
-  opensearch_host   = aws_opensearch_domain.es.endpoint
-  postgres_host     = aws_db_instance.postgres.address
-  postgres_port     = aws_db_instance.postgres.port
-  postgres_db       = aws_db_instance.postgres.db_name
+  opensearch_host   = module.opensearch.opensearch_host
+  postgres_host     = module.rds-pg.postgres_host
+  postgres_port     = module.rds-pg.postgres_port
+  postgres_db       = module.rds-pg.postgres_db
   postgres_user     = var.postgres_user
   postgres_password = var.postgres_password
   aws_region        = var.aws_region
@@ -19,134 +19,49 @@ module "web_instance" {
 
 }
 
-# Get all subnets ids in the default VPC
-data "aws_subnets" "default_vpc_subnets" {
-  filter {
-    name   = "vpc-id"
-    values = [aws_default_vpc.default.id]
-  }
+module "iam" {
+  source     = "./modules/iam"
+  aws_region = var.aws_region
 }
 
-resource "aws_security_group" "alb" {
-  name   = "alb-sg"
-  vpc_id = aws_default_vpc.default.id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow HTTP from anywhere
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow HTTP from anywhere
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+module "security_groups" {
+  source     = "./modules/security_groups"
+  vpc_id     = module.vpc.vpc_id
+  vpc_cidr_block = module.vpc.vpc_cidr_block
 }
 
-resource "aws_lb" "front_end" {
-  name               = "my-app-lb"
-  load_balancer_type = "application"
-  internal           = false
-  security_groups    = [aws_security_group.alb.id]
-  subnets            = data.aws_subnets.default_vpc_subnets.ids
+module "vpc" {
+  source = "./modules/vpc"
 }
 
-
-resource "aws_lb_target_group" "app" {
-  name     = "my-app-tg"
-  port     = 8080
-  protocol = "HTTP"
-  vpc_id   = aws_default_vpc.default.id
-
-  health_check {
-    path                = "/"
-    protocol            = "HTTP"
-    port                = 8080
-    matcher             = "200"
-    interval            = 30
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-  }
+module "alb" {
+  source           = "./modules/alb"
+  alb_sg_id        = module.security_groups.alb_sg_id
+  vpc_subnet_ids   = module.vpc.vpc_subnets_ids
+  vpc_id           = module.vpc.vpc_id
+  certificate_arn  = module.acm.certificate_arn
+  web_instance_ids = module.web_instance.instance_ids
 }
 
-resource "aws_lb_listener" "front_end" {
-  load_balancer_arn = aws_lb.front_end.arn
-  port              = "443"
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = aws_acm_certificate_validation.cert.certificate_arn
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.app.arn
-  }
+module "acm" {
+  source         = "./modules/acm"
+  fe_lb_dns_name = module.alb.fe_lb_dns_name
+  fe_lb_zone_id  = module.alb.fe_lb_zone_id
+  domain_name    = var.domain_name
+  route53_zone   = var.route53_zone
+  dns_name_alias = var.dns_name_alias
 }
 
-resource "aws_lb_listener" "redirect" {
-  load_balancer_arn = aws_lb.front_end.arn
-  port              = "80"
-  protocol          = "HTTP"
-
-  default_action {
-    type = "redirect"
-
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
-  }
+module "rds-pg" {
+  source            = "./modules/rds-pg"
+  security_group_id = module.security_groups.rds_sg_id
+  postgres_user     = var.postgres_user
+  postgres_password = var.postgres_password
 }
 
-resource "aws_lb_target_group_attachment" "app" {
-  count            = length(module.web_instance.instance_ids)
-  target_group_arn = aws_lb_target_group.app.arn
-  target_id        = module.web_instance.instance_ids[count.index]
-  port             = 8080
+module "opensearch" {
+  source = "./modules/opensearch"
 }
-
-
-resource "aws_default_vpc" "default" {
-}
-
-resource "aws_security_group" "ec2_sg" {
-  name   = "ec2-sg"
-  vpc_id = aws_default_vpc.default.id
-
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = [aws_default_vpc.default.cidr_block]
-  }
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [aws_default_vpc.default.cidr_block]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-
-
 
 #For GitHub Actions Workflow
 terraform {

@@ -35,8 +35,8 @@ resource "aws_route53_record" "app_alias" {
   type    = "A"
 
   alias {
-    name                   = aws_lb.front_end.dns_name
-    zone_id                = aws_lb.front_end.zone_id
+    name                   = var.fe_lb_dns_name
+    zone_id                = var.fe_lb_zone_id
     evaluate_target_health = true
   }
 }
