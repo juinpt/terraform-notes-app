@@ -97,6 +97,7 @@ I am using this for learning purposes and adding more components and features as
 At the moment I'm planning on adding these:
 * The IAM instance profile name is hard coded, it will be made into a variable
 * Create a custom VPC to use instead of default
+* Add IAM role and policy for PostgreSQL as well
 * Add monitoring and alerting (e.g. CloudWatch, Prometheus)
 * Implement blue/green or canary deployments for safer rollouts
 * Try auto scaling groups
