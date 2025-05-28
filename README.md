@@ -110,7 +110,6 @@ Ensure your AWS credentials are properly set (via environment or CLI) and you ha
 
 * Terraform 1.2+
 * AWS CLI
-* Docker
 * Teraform cloud account
 * Ubuntu AMI (required for EC2 user_data compatibility)
 
