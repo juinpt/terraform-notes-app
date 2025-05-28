@@ -21,7 +21,7 @@ I am using this for learning purposes and adding more components and features as
   * ACM (AWS Certificate Manager) for SSL certificates
   * IAM Roles for secure access to AWS services (Opensearch)
 
-# Structure
+# Project Structure
 
 ```
 ├── LICENSE
