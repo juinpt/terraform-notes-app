@@ -1,5 +1,6 @@
 # terraform-notes-app
-Learning project using Terraform / AWS / GitHub Actions / Flask / Elasticsearch
+Learning project with main focus on Terraform / AWS / Docker / GitHub Actions
+Planning on adding Kubernetes as I go
 
 This project provisions and deploys a simple Notes application using Terraform and AWS. It demonstrates Infrastructure as Code (IaC) practices for running a Python Flask app with Elasticsearch behind a load-balanced, secure infrastructure.
 
