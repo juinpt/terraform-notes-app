@@ -95,6 +95,7 @@ I am using this for learning purposes and adding more components and features as
 # Planned Features
 
 At the moment I'm planning on adding these:
+* switch from using EC2 instances to ECS
 * The IAM instance profile name is hard coded, it will be made into a variable
 * Create a custom VPC to use instead of default
 * Add IAM role and policy for PostgreSQL as well
@@ -102,7 +103,7 @@ At the moment I'm planning on adding these:
 * Implement blue/green or canary deployments for safer rollouts
 * Try auto scaling groups
 * ...
-* Integrate with Kubernetes
+* Integrate with Kubernetes (EKS or other)
 
 
 # Usage
