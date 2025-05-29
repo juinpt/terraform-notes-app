@@ -101,7 +101,6 @@ At the moment I'm planning on adding these:
 * Add IAM role and policy for PostgreSQL as well
 * Add monitoring and alerting (e.g. CloudWatch, Prometheus)
 * Implement blue/green or canary deployments for safer rollouts
-* Try auto scaling groups
 * ...
 * Integrate with Kubernetes (EKS or other)
 
