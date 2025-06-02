@@ -54,9 +54,10 @@ resource "aws_lb_listener" "redirect" {
   }
 }
 
-resource "aws_lb_target_group_attachment" "app" {
-  count            = length(var.web_instance_ids)
-  target_group_arn = aws_lb_target_group.app.arn
-  target_id        = var.web_instance_ids[count.index]
-  port             = 8080
-}
+# Not needed for ECS
+#resource "aws_lb_target_group_attachment" "app" {
+#  count            = length(var.web_instance_ids)
+#  target_group_arn = aws_lb_target_group.app.arn
+#  target_id        = var.web_instance_ids[count.index]
+#  port             = 8080
+#}

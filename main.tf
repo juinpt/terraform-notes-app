@@ -1,28 +1,43 @@
 # Creates var.instance_count EC2 instances on different subnets 
-module "web_instance" {
-  source                 = "./modules/ec2-instance"
-  instance_type          = var.instance_type
-  ami                    = var.ami
+#module "web_instance" {
+#  source                 = "./modules/ec2-instance"
+#  instance_type          = var.instance_type
+#  ami                    = var.ami
+#  vpc_security_group_ids = [module.security_groups.ec2_sg_id]
+#  instance_count         = var.instance_count
+#  subnet_ids             = module.vpc.vpc_subnets_ids
+#  iam_instance_profile   = module.iam.notes_profile_name
+#
+#  opensearch_host   = module.opensearch.opensearch_host
+#  postgres_host     = module.rds-pg.postgres_host
+#  postgres_port     = module.rds-pg.postgres_port
+#  postgres_db       = module.rds-pg.postgres_db
+#  postgres_user     = var.postgres_user
+#  postgres_password = var.postgres_password
+#  aws_region        = var.aws_region
+#  flask_secret_key  = var.flask_secret_key
+#
+#}
+
+module "ecs" {
+  source                 = "./modules/ecs"
+  opensearch_host        = module.opensearch.opensearch_host
+  postgres_host          = module.rds-pg.postgres_host
+  postgres_port          = module.rds-pg.postgres_port
+  postgres_db            = module.rds-pg.postgres_db
+  postgres_user          = var.postgres_user
+  postgres_password      = var.postgres_password
+  aws_region             = var.aws_region
+  flask_secret_key       = var.flask_secret_key
   vpc_security_group_ids = [module.security_groups.ec2_sg_id]
-  instance_count         = var.instance_count
   subnet_ids             = module.vpc.vpc_subnets_ids
-  iam_instance_profile   = module.iam.notes_profile_name
-
-  opensearch_host   = module.opensearch.opensearch_host
-  postgres_host     = module.rds-pg.postgres_host
-  postgres_port     = module.rds-pg.postgres_port
-  postgres_db       = module.rds-pg.postgres_db
-  postgres_user     = var.postgres_user
-  postgres_password = var.postgres_password
-  aws_region        = var.aws_region
-  flask_secret_key  = var.flask_secret_key
-
+  alb_target_group_arn   = module.alb.alb_target_group_arn
 }
 
-module "iam" {
-  source     = "./modules/iam"
-  aws_region = var.aws_region
-}
+#module "iam" {
+#  source     = "./modules/iam"
+#  aws_region = var.aws_region
+#}
 
 module "security_groups" {
   source         = "./modules/security_groups"
@@ -35,12 +50,12 @@ module "vpc" {
 }
 
 module "alb" {
-  source           = "./modules/alb"
-  alb_sg_id        = module.security_groups.alb_sg_id
-  vpc_subnet_ids   = module.vpc.vpc_subnets_ids
-  vpc_id           = module.vpc.vpc_id
-  certificate_arn  = module.acm.certificate_arn
-  web_instance_ids = module.web_instance.instance_ids
+  source          = "./modules/alb"
+  alb_sg_id       = module.security_groups.alb_sg_id
+  vpc_subnet_ids  = module.vpc.vpc_subnets_ids
+  vpc_id          = module.vpc.vpc_id
+  certificate_arn = module.acm.certificate_arn
+  #  web_instance_ids = module.web_instance.instance_ids
 }
 
 module "acm" {

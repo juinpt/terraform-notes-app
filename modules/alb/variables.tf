@@ -14,6 +14,6 @@ variable "certificate_arn" {
   type = string
 }
 
-variable "web_instance_ids" {
-  type = list(string)
-}
+#variable "web_instance_ids" {
+#  type = list(string)
+#}
