@@ -75,7 +75,8 @@ module "rds-pg" {
 }
 
 module "opensearch" {
-  source = "./modules/opensearch"
+  source            = "./modules/opensearch"
+  ecs_task_role_arn = module.ecs.ecs_task_role_arn
 }
 
 #For GitHub Actions Workflow
