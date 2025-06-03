@@ -44,6 +44,10 @@ I am using this for learning purposes and adding more components and features as
 │   │   ├── main.tf
 │   │   ├── outputs.tf
 │   │   └── variables.tf
+│   ├── ecs
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
 │   ├── iam
 │   │   ├── main.tf
 │   │   ├── outputs.tf
