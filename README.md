@@ -13,7 +13,8 @@ I am using this for learning purposes and adding more components and features as
 * Terraform – Manages infrastructure as code
 * GitHub Actions for Terraform automation (with Terraform Cloud)
 * AWS Services Used:
-  * EC2 (Ubuntu host running Docker containers)
+  * ~~EC2 (Ubuntu host running Docker containers)~~
+  * ECS Fargate service running Docker containers
   * Application Load Balancer (ALB) with HTTPS support
   * Security Groups
   * VPC and Subnets (default VPC used for now)
@@ -84,7 +85,7 @@ I am using this for learning purposes and adding more components and features as
 # Current Features
 
 * One-click provisioning of the app and its dependencies using Terraform and GitHub Actions.
-* Secure and isolated EC2 instance(s) with custom Security Groups.
+* Secure and isolated ~~EC2 instance(s)~~ ECS Fargate services protected by custom Security Groups..
 * ALB with automatic HTTPS via ACM
 * Deployment is handled by user_data, which launches prebuilt Docker containers for the app and search backend.
 * Application is exposed via an AWS Application Load Balancer (ALB) with HTTPS support.
@@ -95,7 +96,7 @@ I am using this for learning purposes and adding more components and features as
 # Planned Features
 
 At the moment I'm planning on adding these:
-* switch from using EC2 instances to ECS
+* ~~switch from using EC2 instances to ECS~~
 * The IAM instance profile name is hard coded, it will be made into a variable
 * Create a custom VPC to use instead of default
 * Add IAM role and policy for PostgreSQL as well
@@ -118,7 +119,7 @@ Ensure your AWS credentials are properly set (via environment or CLI) and you ha
 * Terraform 1.2+
 * AWS CLI
 * Teraform cloud account
-* Ubuntu AMI (required for EC2 user_data compatibility)
+* ~~Ubuntu AMI (required for EC2 user_data compatibility)~~
 
 
 
