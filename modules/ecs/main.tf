@@ -72,6 +72,33 @@ resource "aws_iam_role_policy_attachment" "ecs_secrets_access_attachment" {
   policy_arn = aws_iam_policy.ecs_secrets_access.arn
 }
 
+resource "aws_iam_policy" "ecr_access" {
+  name        = "ecs-secrets-access"
+  description = "Allows ECS tasks to retrieve containers from ECR"
+
+  policy = jsonencode({
+       "Version": "2012-10-17",
+       "Statement": [
+         {
+           "Effect": "Allow",
+           "Action": [
+             "ecr:GetAuthorizationToken",
+             "ecr:BatchCheckLayerAvailability",
+             "ecr:GetDownloadUrlForLayer",
+             "ecr:BatchGetImage"
+           ],
+           "Resource": "arn:aws:ecr:ap-northeast-1:211584806996:repository/*"
+         }
+       ]
+     })
+}
+
+resource "aws_iam_role_policy_attachment" "ecr_access_attachment" {
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = aws_iam_policy.ecr_access.arn
+}
+
+
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
   role       = aws_iam_role.ecs_task_execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
