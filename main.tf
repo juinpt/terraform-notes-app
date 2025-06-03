@@ -46,7 +46,9 @@ module "security_groups" {
 }
 
 module "vpc" {
-  source = "./modules/vpc"
+  source             = "./modules/vpc"
+  aws_region         = var.aws_region
+  security_group_ids = [module.security_groups.ec2_sg_id]
 }
 
 module "alb" {

@@ -89,7 +89,7 @@ resource "aws_iam_role_policy_attachment" "ecs_secrets_policy" {
 
 
 resource "aws_secretsmanager_secret" "postgres_password" {
-  name = "postgres_password"
+  name                    = "postgres_password"
   recovery_window_in_days = 0
 }
 
@@ -99,7 +99,7 @@ resource "aws_secretsmanager_secret_version" "postgres_password_version" {
 }
 
 resource "aws_secretsmanager_secret" "flask_secret_key" {
-  name = "flask_secret_key"
+  name                    = "flask_secret_key"
   recovery_window_in_days = 0
 }
 
