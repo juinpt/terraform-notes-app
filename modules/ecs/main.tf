@@ -110,6 +110,12 @@ resource "aws_secretsmanager_secret_version" "flask_secret_key_version" {
 
 resource "aws_ecs_cluster" "notes-app" {
   name = "notes-app"
+
+  setting {
+    name  = "containerInsights"
+    value = "disabled"
+  }
+
 }
 
 resource "aws_ecs_task_definition" "notes-app" {
