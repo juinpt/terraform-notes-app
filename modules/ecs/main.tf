@@ -73,7 +73,7 @@ resource "aws_iam_role_policy_attachment" "ecs_secrets_access_attachment" {
 }
 
 resource "aws_iam_policy" "ecr_access" {
-  name        = "ecs-secrets-access"
+  name        = "ecr-access"
   description = "Allows ECS tasks to retrieve containers from ECR"
 
   policy = jsonencode({
