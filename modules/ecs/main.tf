@@ -114,7 +114,7 @@ resource "aws_ecs_task_definition" "notes-app" {
       ],
       environment = [
         { name = "POSTGRES_HOST", value = var.postgres_host },
-        { name = "POSTGRES_PORT", value = var.postgres_port },
+        { name = "POSTGRES_PORT", value = tostring(var.postgres_port) },
         { name = "POSTGRES_DB", value = var.postgres_db },
         { name = "POSTGRES_USER", value = var.postgres_user },
         { name = "OPENSEARCH_HOST", value = var.opensearch_host },
