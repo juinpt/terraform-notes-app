@@ -167,8 +167,8 @@ resource "aws_ecs_task_definition" "notes-app" {
 
   container_definitions = jsonencode([
     {
-      name  = "notes-app"
-      image = "211584806996.dkr.ecr.ap-northeast-1.amazonaws.com/learning/notes-app:latest"
+      name      = "notes-app"
+      image     = "211584806996.dkr.ecr.ap-northeast-1.amazonaws.com/learning/notes-app:latest"
       essential = true
       portMappings = [
         {

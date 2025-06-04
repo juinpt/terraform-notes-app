@@ -58,7 +58,7 @@ resource "aws_route_table_association" "public_assoc" {
 }
 
 resource "aws_eip" "nat" {
-  count = length(var.azs)
+  count  = length(var.azs)
   domain = "vpc"
 }
 
