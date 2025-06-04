@@ -5,7 +5,7 @@
 #  ami                    = var.ami
 #  vpc_security_group_ids = [module.security_groups.ec2_sg_id]
 #  instance_count         = var.instance_count
-#  subnet_ids             = module.vpc.vpc_subnets_ids
+#  subnet_ids             = module.vpc.private_subnets_ids
 #  iam_instance_profile   = module.iam.notes_profile_name
 #
 #  opensearch_host   = module.opensearch.opensearch_host
@@ -20,17 +20,18 @@
 #}
 
 module "ecs" {
-  source                 = "./modules/ecs"
-  opensearch_host        = module.opensearch.opensearch_host
-  postgres_host          = module.rds-pg.postgres_host
-  postgres_port          = module.rds-pg.postgres_port
-  postgres_db            = module.rds-pg.postgres_db
-  postgres_user          = var.postgres_user
-  postgres_password      = var.postgres_password
-  aws_region             = var.aws_region
-  flask_secret_key       = var.flask_secret_key
-  vpc_security_group_ids = [module.security_groups.ec2_sg_id]
-  subnet_ids             = module.vpc.vpc_subnets_ids
+  source            = "./modules/ecs"
+  opensearch_host   = module.opensearch.opensearch_host
+  postgres_host     = module.rds-pg.postgres_host
+  postgres_port     = module.rds-pg.postgres_port
+  postgres_db       = module.rds-pg.postgres_db
+  postgres_user     = var.postgres_user
+  postgres_password = var.postgres_password
+  aws_region        = var.aws_region
+  flask_secret_key  = var.flask_secret_key
+
+  vpc_security_group_ids = [module.security_groups.ecs_sg_id]
+  subnet_ids             = module.vpc.private_subnet_ids
   alb_target_group_arn   = module.alb.alb_target_group_arn
 }
 
@@ -48,13 +49,13 @@ module "security_groups" {
 module "vpc" {
   source             = "./modules/vpc"
   aws_region         = var.aws_region
-  security_group_ids = [module.security_groups.ec2_sg_id]
+  security_group_ids = [module.security_groups.ecs_sg_id]
 }
 
 module "alb" {
   source          = "./modules/alb"
   alb_sg_id       = module.security_groups.alb_sg_id
-  vpc_subnet_ids  = module.vpc.vpc_subnets_ids
+  vpc_subnet_ids  = module.vpc.private_subnet_ids
   vpc_id          = module.vpc.vpc_id
   certificate_arn = module.acm.certificate_arn
   #  web_instance_ids = module.web_instance.instance_ids

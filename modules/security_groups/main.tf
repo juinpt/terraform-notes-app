@@ -1,5 +1,5 @@
-resource "aws_security_group" "ec2_sg" {
-  name   = "ec2-sg"
+resource "aws_security_group" "ecs_sg" {
+  name   = "ecs-sg"
   vpc_id = var.vpc_id
 
   ingress {
@@ -59,7 +59,7 @@ resource "aws_security_group" "rds_sg" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    security_groups = [aws_security_group.ec2_sg.id]
+    security_groups = [aws_security_group.ecs_sg.id]
   }
 
   egress {

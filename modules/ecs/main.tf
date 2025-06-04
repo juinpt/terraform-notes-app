@@ -67,8 +67,13 @@ resource "aws_iam_policy" "ecs_secrets_access" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_secrets_access_attachment" {
+resource "aws_iam_role_policy_attachment" "ecs_secrets_access_attachment_exec" {
   role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = aws_iam_policy.ecs_secrets_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_secrets_access_attachment" {
+  role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.ecs_secrets_access.arn
 }
 
@@ -77,20 +82,20 @@ resource "aws_iam_policy" "ecr_access" {
   description = "Allows ECS tasks to retrieve containers from ECR"
 
   policy = jsonencode({
-       "Version": "2012-10-17",
-       "Statement": [
-         {
-           "Effect": "Allow",
-           "Action": [
-             "ecr:GetAuthorizationToken",
-             "ecr:BatchCheckLayerAvailability",
-             "ecr:GetDownloadUrlForLayer",
-             "ecr:BatchGetImage"
-           ],
-           "Resource": "arn:aws:ecr:ap-northeast-1:211584806996:repository/*"
-         }
-       ]
-     })
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage"
+        ],
+        "Resource" : "arn:aws:ecr:${var.aws_region}:${data.aws_caller_identity.current.account_id}:repository/*"
+      }
+    ]
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "ecr_access_attachment" {
@@ -109,9 +114,14 @@ resource "aws_iam_role_policy_attachment" "attach_opensearch" {
   policy_arn = aws_iam_policy.opensearch_access.arn
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_secrets_policy" {
-  role       = aws_iam_role.ecs_task_role.name
-  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+#resource "aws_iam_role_policy_attachment" "ecs_secrets_policy" {
+#  role       = aws_iam_role.ecs_task_role.name
+#  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+#}
+
+resource "aws_iam_role_policy_attachment" "ecs_logs" {
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
 
 
@@ -157,8 +167,8 @@ resource "aws_ecs_task_definition" "notes-app" {
 
   container_definitions = jsonencode([
     {
-      name      = "notes-app"
-      image     = "211584806996.dkr.ecr.ap-northeast-1.amazonaws.com/learning/notes-app:latest"
+      name  = "notes-app"
+      image = "211584806996.dkr.ecr.ap-northeast-1.amazonaws.com/learning/notes-app:latest"
       essential = true
       portMappings = [
         {
@@ -183,7 +193,15 @@ resource "aws_ecs_task_definition" "notes-app" {
           name      = "FLASK_SECRET_KEY",
           valueFrom = aws_secretsmanager_secret.flask_secret_key.arn
         }
-      ]
+      ],
+      logConfiguration = {
+        logDriver = "awslogs",
+        options = {
+          awslogs-group         = "/ecs/notes-app"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     }
   ])
 }
@@ -218,3 +236,7 @@ resource "aws_ecs_service" "notes-app" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "ecs_logs" {
+  name              = "/ecs/notes-app"
+  retention_in_days = 1
+}
