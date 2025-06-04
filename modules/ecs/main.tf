@@ -194,6 +194,7 @@ resource "aws_ecs_task_definition" "notes-app" {
           valueFrom = aws_secretsmanager_secret.flask_secret_key.arn
         }
       ],
+      # Temporarily added for debugging
       logConfiguration = {
         logDriver = "awslogs",
         options = {
