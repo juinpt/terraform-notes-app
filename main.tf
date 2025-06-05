@@ -73,6 +73,7 @@ module "acm" {
 module "rds-pg" {
   source            = "./modules/rds-pg"
   security_group_id = module.security_groups.rds_sg_id
+  subnet_ids        = module.vpc.private_subnet_ids
   postgres_user     = var.postgres_user
   postgres_password = var.postgres_password
 }

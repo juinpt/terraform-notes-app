@@ -11,10 +11,20 @@ resource "aws_db_instance" "postgres" {
   backup_retention_period = 7
   backup_window           = "15:00-16:00" # 00:00-01:00 JST
   vpc_security_group_ids  = [var.security_group_id]
+  db_subnet_group_name    = aws_db_subnet_group.postgres.name
   skip_final_snapshot     = true # So a final snapshot is taken on destroy
   publicly_accessible     = true # For testing purposes
 
   tags = {
     Name = "notes-postgres"
+  }
+}
+
+resource "aws_db_subnet_group" "postgres" {
+  name       = "notes-db-subnet-group"
+  subnet_ids = var.subnet_ids
+
+  tags = {
+    Name = "notes-db-subnet-group"
   }
 }
