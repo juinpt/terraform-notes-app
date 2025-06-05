@@ -223,7 +223,7 @@ resource "aws_ecs_service" "notes-app" {
   network_configuration {
     security_groups  = var.vpc_security_group_ids
     subnets          = var.subnet_ids
-    assign_public_ip = false
+    assign_public_ip = true # for debugging
   }
 
   load_balancer {
