@@ -119,10 +119,10 @@ resource "aws_iam_role_policy_attachment" "attach_opensearch" {
 #  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
 #}
 
-resource "aws_iam_role_policy_attachment" "ecs_logs" {
-  role       = aws_iam_role.ecs_task_execution.name
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
-}
+#resource "aws_iam_role_policy_attachment" "ecs_logs" {
+#  role       = aws_iam_role.ecs_task_execution.name
+#  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+#}
 
 
 resource "aws_secretsmanager_secret" "postgres_password" {
@@ -193,15 +193,15 @@ resource "aws_ecs_task_definition" "notes-app" {
           name      = "FLASK_SECRET_KEY",
           valueFrom = aws_secretsmanager_secret.flask_secret_key.arn
         }
-      ],
+      ]#,
       # Temporarily added for debugging
-      logConfiguration = {
-        logDriver = "awslogs",
-        options = {
-          awslogs-group         = "/ecs/notes-app"
-          awslogs-region        = var.aws_region
-          awslogs-stream-prefix = "ecs"
-        }
+      #logConfiguration = {
+      #  logDriver = "awslogs",
+       # options = {
+       #   awslogs-group         = "/ecs/notes-app"
+       #   awslogs-region        = var.aws_region
+       #   awslogs-stream-prefix = "ecs"
+       # }
       }
     }
   ])
@@ -237,7 +237,7 @@ resource "aws_ecs_service" "notes-app" {
   }
 }
 
-resource "aws_cloudwatch_log_group" "ecs_logs" {
-  name              = "/ecs/notes-app"
-  retention_in_days = 1
-}
+#resource "aws_cloudwatch_log_group" "ecs_logs" {
+#  name              = "/ecs/notes-app"
+#  retention_in_days = 1
+#}
