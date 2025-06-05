@@ -193,16 +193,16 @@ resource "aws_ecs_task_definition" "notes-app" {
           name      = "FLASK_SECRET_KEY",
           valueFrom = aws_secretsmanager_secret.flask_secret_key.arn
         }
-      ]
+      ],
       # Temporarily added for debugging
-      #logConfiguration = {
-      #  logDriver = "awslogs",
-       # options = {
-       #   awslogs-group         = "/ecs/notes-app"
-       #   awslogs-region        = var.aws_region
-       #   awslogs-stream-prefix = "ecs"
-       # }
-      #}
+      logConfiguration = {
+        logDriver = "awslogs",
+        options = {
+          awslogs-group         = "/ecs/notes-app"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     }
   ])
 }
@@ -237,7 +237,7 @@ resource "aws_ecs_service" "notes-app" {
   }
 }
 
-#resource "aws_cloudwatch_log_group" "ecs_logs" {
-#  name              = "/ecs/notes-app"
-#  retention_in_days = 1
-#}
+resource "aws_cloudwatch_log_group" "ecs_logs" {
+  name              = "/ecs/notes-app"
+  retention_in_days = 1
+}
