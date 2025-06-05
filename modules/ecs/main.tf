@@ -202,7 +202,7 @@ resource "aws_ecs_task_definition" "notes-app" {
        #   awslogs-region        = var.aws_region
        #   awslogs-stream-prefix = "ecs"
        # }
-      }
+      #}
     }
   ])
 }
